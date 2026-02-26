@@ -1,0 +1,31 @@
+services:
+  - type: web
+    name: hospital-management
+    env: python
+    region: oregon
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn config.wsgi:application --bind 0.0.0.0:$PORT
+    envVars:
+      - key: DJANGO_SECRET_KEY
+        generateValue: true
+      - key: DJANGO_DEBUG
+        value: "False"
+      - key: DATABASE_ENGINE
+        value: django.db.backends.postgresql
+      - key: DATABASE_NAME
+        value: hospital_db
+      - key: DATABASE_USER
+        sync: false
+      - key: DATABASE_PASSWORD
+        sync: false
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: hospital-redis
+    autoDeploy: true
+
+  - type: redis
+    name: hospital-redis
+    region: oregon
+    plan: free
+    ipAllowList: []

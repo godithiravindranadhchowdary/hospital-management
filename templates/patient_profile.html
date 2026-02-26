@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile - Hospital Management System</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); min-height: 100vh; background-attachment: fixed; }
+        body::before { content: ''; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: radial-gradient(circle at 20% 80%, rgba(120, 119, 255, 0.15) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(255, 119, 204, 0.15) 0%, transparent 50%); pointer-events: none; z-index: 0; }
+        header { background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding: 1rem 2rem; position: fixed; width: 100%; top: 0; z-index: 1000; }
+        nav { display: flex; justify-content: space-between; align-items: center; max-width: 1400px; margin: 0 auto; }
+        .logo { font-size: 1.5rem; font-weight: 700; color: #fff; text-decoration: none; }
+        .nav-links { display: flex; list-style: none; gap: 0.5rem; align-items: center; flex-wrap: wrap; }
+        .nav-links a { text-decoration: none; color: rgba(255, 255, 255, 0.8); font-weight: 500; padding: 0.5rem 1rem; border-radius: 8px; transition: all 0.2s; font-size: 0.9rem; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .nav-links a:hover, .nav-links a.active { background: rgba(255, 255, 255, 0.2); color: #fff; }
+        .container { max-width: 800px; margin: 0 auto; padding: 120px 20px 50px; position: relative; z-index: 1; }
+        .glass-card { background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 16px; padding: 2rem; margin-bottom: 1.5rem; }
+        .page-header h1 { color: #fff; font-size: 1.8rem; margin-bottom: 0.5rem; }
+        .page-header p { color: rgba(255, 255, 255, 0.7); }
+        .back-link { display: inline-block; margin-bottom: 1rem; color: #fff; text-decoration: none; padding: 0.5rem 1rem; background: rgba(255, 255, 255, 0.1); border-radius: 8px; font-weight: 500; border: 1px solid rgba(255, 255, 255, 0.1); }
+        .back-link:hover { background: rgba(255, 255, 255, 0.2); }
+        .profile-info { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+        .info-item { background: rgba(255, 255, 255, 0.05); padding: 1rem; border-radius: 8px; }
+        .info-item .label { color: rgba(255, 255, 255, 0.6); font-size: 0.85rem; }
+        .info-item .value { color: #fff; font-weight: 600; font-size: 1.1rem; margin-top: 0.25rem; }
+        .medical-info { grid-column: span 2; }
+        .medical-info .value { font-size: 0.95rem; }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="/" class="logo">🏥 Hospital MS</a>
+            <ul class="nav-links">
+                <li><a href="/patient/">🏥 My Dashboard</a></li>
+                <li><a href="/patient/appointments/">📅 My Appointments</a></li>
+                <li><a href="/patient/prescriptions/">💊 My Prescriptions</a></li>
+                <li><a href="/patient/invoices/">💰 My Invoices</a></li>
+                <li><a href="/patient/payments/">💳 My Payments</a></li>
+                <li><a href="/patient/medical-records/">📋 Medical Records</a></li>
+                <li><a href="/patient/profile/" class="active">👤 My Profile</a></li>
+                <li><a href="/logout/">🚪 Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+    <div class="container">
+        <a href="/patient/" class="back-link">← Back to Dashboard</a>
+        <div class="glass-card">
+            <div class="page-header">
+                <h1>👤 My Profile</h1>
+                <p>{{ patient.user.get_full_name }}</p>
+            </div>
+            <div class="profile-info">
+                <div class="info-item"><div class="label">Email</div><div class="value">{{ patient.user.email }}</div></div>
+                <div class="info-item"><div class="label">Phone</div><div class="value">{{ patient.user.phone|default:"Not provided" }}</div></div>
+                <div class="info-item"><div class="label">Date of Birth</div><div class="value">{{ patient.user.date_of_birth|default:"Not provided" }}</div></div>
+                <div class="info-item"><div class="label">Gender</div><div class="value">{{ patient.gender|title|default:"Not provided" }}</div></div>
+                <div class="info-item"><div class="label">Blood Type</div><div class="value">{{ patient.blood_type|default:"Not provided" }}</div></div>
+                <div class="info-item"><div class="label">Total Spent</div><div class="value">₹{{ patient.total_spent }}</div></div>
+                <div class="info-item medical-info"><div class="label">Emergency Contact</div><div class="value">{{ patient.emergency_contact|default:"Not provided" }} - {{ patient.emergency_contact_name|default:"" }}</div></div>
+                <div class="info-item medical-info"><div class="label">Medical History</div><div class="value">{{ patient.medical_history|default:"None" }}</div></div>
+                <div class="info-item medical-info"><div class="label">Allergies</div><div class="value">{{ patient.allergies|default:"None" }}</div></div>
+                <div class="info-item medical-info"><div class="label">Current Condition</div><div class="value">{{ patient.current_condition|default:"None" }}</div></div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

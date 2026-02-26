@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Doctors - Hospital Management System</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); min-height: 100vh; background-attachment: fixed; }
+        body::before { content: ''; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: radial-gradient(circle at 20% 80%, rgba(120, 119, 255, 0.15) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(255, 119, 204, 0.15) 0%, transparent 50%); pointer-events: none; z-index: 0; }
+        header { background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding: 1rem 2rem; position: fixed; width: 100%; top: 0; z-index: 1000; }
+        nav { display: flex; justify-content: space-between; align-items: center; max-width: 1400px; margin: 0 auto; }
+        .logo { font-size: 1.5rem; font-weight: 700; color: #fff; text-decoration: none; }
+        .nav-links { display: flex; list-style: none; gap: 0.5rem; align-items: center; flex-wrap: wrap; }
+        .nav-links a { text-decoration: none; color: rgba(255, 255, 255, 0.8); font-weight: 500; padding: 0.5rem 1rem; border-radius: 8px; transition: all 0.2s; font-size: 0.9rem; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .nav-links a:hover, .nav-links a.active { background: rgba(255, 255, 255, 0.2); color: #fff; }
+        .container { max-width: 1400px; margin: 0 auto; padding: 120px 20px 50px; position: relative; z-index: 1; }
+        .glass-card { background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 16px; padding: 2rem; margin-bottom: 1.5rem; }
+        .page-header h1 { color: #fff; font-size: 1.8rem; margin-bottom: 0.5rem; }
+        .page-header p { color: rgba(255, 255, 255, 0.7); }
+        .back-link { display: inline-block; margin-bottom: 1rem; color: #fff; text-decoration: none; padding: 0.5rem 1rem; background: rgba(255, 255, 255, 0.1); border-radius: 8px; font-weight: 500; border: 1px solid rgba(255, 255, 255, 0.1); }
+        .back-link:hover { background: rgba(255, 255, 255, 0.2); }
+        .search-container { margin-bottom: 1.5rem; display: flex; gap: 0.5rem; }
+        .search-input { flex: 1; padding: 0.75rem 1rem; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.2); background: rgba(255, 255, 255, 0.1); color: #fff; font-size: 1rem; }
+        .search-input::placeholder { color: rgba(255, 255, 255, 0.5); }
+        .search-input:focus { outline: none; border-color: rgba(255, 255, 255, 0.4); }
+        .search-btn { padding: 0.75rem 1.5rem; border-radius: 8px; border: none; background: rgba(59, 130, 246, 0.8); color: #fff; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+        .search-btn:hover { background: rgba(59, 130, 246, 1); }
+        .clear-btn { padding: 0.75rem 1.5rem; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.2); background: rgba(255, 255, 255, 0.1); color: #fff; font-weight: 600; cursor: pointer; transition: all 0.2s; text-decoration: none; display: inline-block; }
+        .clear-btn:hover { background: rgba(255, 255, 255, 0.2); }
+        table { width: 100%; border-collapse: collapse; background: rgba(255, 255, 255, 0.05); border-radius: 12px; overflow: hidden; }
+        th, td { padding: 1rem; text-align: left; border-bottom: 1px solid rgba(255, 255, 255, 0.1); color: rgba(255, 255, 255, 0.8); }
+        th { background: rgba(255, 255, 255, 0.1); font-weight: 600; }
+        tr:hover { background: rgba(255, 255, 255, 0.05); }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="/" class="logo">🏥 Hospital MS</a>
+            <ul class="nav-links">
+                <li><a href="/dashboard/">📊 Dashboard</a></li>
+                <li><a href="/admin/doctors/" class="active">👨‍⚕️ Doctors</a></li>
+                <li><a href="/admin/patients/">🏥 Patients</a></li>
+                <li><a href="/admin/operations/">🔬 Operations</a></li>
+                <li><a href="/admin/leaves/">🏖️ Leaves</a></li>
+                <li><a href="/admin/payments/">💰 Payments</a></li>
+                <li><a href="/admin/medical-records/">📋 Records</a></li>
+                <li><a href="/admin/">⚙️ Admin</a></li>
+                <li><a href="/logout/">🚪 Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+    <div class="container">
+        <a href="/dashboard/" class="back-link">← Back to Dashboard</a>
+        <div class="glass-card">
+            <div class="page-header">
+                <h1>👨‍⚕️ Manage Doctors</h1>
+                <p>View and manage all doctors</p>
+            </div>
+            <div class="search-container">
+                <form method="get" style="display: flex; gap: 0.5rem; width: 100%;">
+                    <input type="text" name="search" class="search-input" placeholder="Search doctors by name, specialty, or qualification..." value="{{ search_query }}">
+                    <button type="submit" class="search-btn">🔍 Search</button>
+                    {% if search_query %}
+                    <a href="/admin/doctors/" class="clear-btn">✕ Clear</a>
+                    {% endif %}
+                </form>
+            </div>
+            {% if doctors %}
+            <table>
+                <thead>
+                    <tr><th>Name</th><th>Specialty</th><th>Qualification</th><th>Experience</th><th>Fee</th><th>Patients</th><th>Earnings</th><th>Status</th></tr>
+                </thead>
+                <tbody>
+                    {% for doctor in doctors %}
+                    <tr>
+                        <td>Dr. {{ doctor.user.get_full_name }}</td>
+                        <td>{{ doctor.specialty }}</td>
+                        <td>{{ doctor.qualification }}</td>
+                        <td>{{ doctor.experience }} yrs</td>
+                        <td>₹{{ doctor.consultation_fee }}</td>
+                        <td>{{ doctor.total_patients }}</td>
+                        <td>₹{{ doctor.total_earnings }}</td>
+                        <td>{% if doctor.is_available %}Available{% else %}Unavailable{% endif %}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <p style="color: rgba(255,255,255,0.7);">No doctors found.</p>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Prescriptions - Hospital Management System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #fff;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            background-attachment: fixed;
+            overflow-x: hidden;
+        }
+        
+        /* Animated gradient orbs */
+        .orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.5;
+            animation: float 20s infinite ease-in-out;
+            z-index: 0;
+        }
+        
+        .orb-1 {
+            width: 400px;
+            height: 400px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            top: -100px;
+            left: -100px;
+        }
+        
+        .orb-2 {
+            width: 500px;
+            height: 500px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            top: 50%;
+            right: -150px;
+            animation-delay: -5s;
+        }
+        
+        .orb-3 {
+            width: 350px;
+            height: 350px;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            bottom: -100px;
+            left: 30%;
+            animation-delay: -10s;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(50px, 30px) scale(1.1); }
+            50% { transform: translate(-30px, 50px) scale(0.95); }
+            75% { transform: translate(40px, -20px) scale(1.05); }
+        }
+        
+        /* Glass Header */
+        header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            padding: 1rem 2rem;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #fff;
+            text-decoration: none;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 0.5rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 12px;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+        
+        .nav-links a:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-2px);
+        }
+        
+        .nav-links a.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border: none;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 120px 20px 50px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .page-header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            padding: 2rem;
+            border-radius: 20px;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+        
+        .page-header h1 {
+            color: #fff;
+            font-size: 1.8rem;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        .prescriptions-list {
+            display: grid;
+            gap: 1rem;
+        }
+        
+        .prescription-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            padding: 1.5rem;
+            border-radius: 18px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            transition: all 0.3s;
+        }
+        
+        .prescription-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+        }
+        
+        .prescription-card .id {
+            font-size: 0.9rem;
+            color: #667eea;
+            font-weight: 600;
+        }
+        
+        .prescription-card .doctor {
+            font-weight: 600;
+            color: #fff;
+            margin: 0.5rem 0;
+        }
+        
+        .prescription-card .medications {
+            padding: 0.75rem;
+            background: rgba(102, 126, 234, 0.2);
+            border-radius: 10px;
+            margin: 0.75rem 0;
+            font-weight: 500;
+        }
+        
+        .prescription-card .info {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin-bottom: 1rem;
+            color: #fff;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            font-weight: 500;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            transition: all 0.3s;
+        }
+        
+        .back-link:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateX(-5px);
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated gradient orbs -->
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+    
+    <header>
+        <nav>
+            <a href="/" class="logo">🏥 Hospital MS</a>
+            <ul class="nav-links">
+                <li><a href="/patient/">🏥 My Dashboard</a></li>
+                <li><a href="/patient/appointments/">📅 My Appointments</a></li>
+                <li><a href="/patient/prescriptions/" class="active">💊 My Prescriptions</a></li>
+                <li><a href="/patient/invoices/">💰 My Invoices</a></li>
+                <li><a href="/logout/">🔐 Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <div class="container">
+        <a href="/patient/" class="back-link">← Back to Dashboard</a>
+        
+        <div class="page-header">
+            <h1>💊 My Prescriptions</h1>
+        </div>
+        
+        <div class="prescriptions-list">
+            {% for rx in prescriptions %}
+            <div class="prescription-card">
+                <div class="id">Prescription #{{ rx.id }}</div>
+                <div class="doctor">Dr. {{ rx.created_by.user.first_name }} {{ rx.created_by.user.last_name }} - {{ rx.created_by.specialty }}</div>
+                <div class="medications">{{ rx.medications }}</div>
+                <div class="info"><strong>Dosage:</strong> {{ rx.dosage }}</div>
+                <div class="info"><strong>Instructions:</strong> {{ rx.instructions }}</div>
+                <div class="info"><strong>Date:</strong> {{ rx.created_at|date:"M d, Y" }}</div>
+            </div>
+            {% empty %}
+            <p style="color: rgba(255, 255, 255, 0.7);">No prescriptions found.</p>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>
